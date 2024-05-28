@@ -66,7 +66,7 @@ public class EmployeeRestController {
     @Test
     void createEmployee(){
         String url = "http://localhost:" + port +"/addEmployee";
-        String body = "{\"name\":\"John\",\"grp\":\"SQA\",\"email\":\"ridoy@gmail.com\"}";
+        String body = "{\"name\":\"Ridoy\",\"grp\":\"Hossain\",\"email\":\"ridoy@gmail.com\"}";
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         List<String> appJson = new ArrayList<String>();
         appJson.add("application/json");
@@ -86,5 +86,28 @@ public class EmployeeRestController {
                 HttpMethod.GET, entity, String.class);
         System.out.println(response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    void deleteEmployee() {
+        // Arrange
+        String url = "http://localhost:" + port + "/{id}";
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+
+        Map<String, String> pathParams = new HashMap<>();
+        pathParams.put("id", "14");
+
+        // Create an employee first to ensure it exists before deletion
+        String createBody = "{\"name\":\"Ridoy\",\"grp\":\"Hossain\",\"email\":\"ridoy@gmail.com\"}";
+        HttpEntity<String> createEntity = new HttpEntity<>(createBody, headers);
+        restTemplate.postForEntity("http://localhost:" + port + "/employees", createEntity, String.class);
+
+        // Act
+        HttpEntity<String> deleteEntity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, deleteEntity, String.class, pathParams);
+
+        // Assert
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
 }
