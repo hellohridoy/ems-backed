@@ -1,0 +1,62 @@
+package com.firstSpringapi.firstapi;
+import static org.junit.jupiter.api.Assertions.assertEquals; // Import for JUnit 5
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.*;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.util.UriComponentsBuilder;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class EmployeeRestController {
+    @LocalServerPort
+    private int port=9090;
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    public ResponseEntity<String>doRestCall(String uri, MultiValueMap<String,String>queryParams,
+                                            MultiValueMap<String,String> headers, String body,
+                                            Map<String, String> pathParams, HttpMethod method) {
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(uri);
+        HttpEntity<String>requestEntity = new HttpEntity<>(body,headers);
+        ResponseEntity<String>responseEntity = restTemplate.exchange(builder.buildAndExpand(pathParams).toUri(),method,requestEntity,String.class);
+        return responseEntity;
+    }
+
+//    String baseUri = "https://example.com/api/employees/{id}";
+//    Map<String, String> pathParams = new HashMap<>();
+//pathParams.put("id", "123"); // Assuming we want to update employee with ID 123
+//
+//    MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+//headers.add("Authorization", "Bearer your-auth-token");
+//
+//    String requestBody = "{\"firstName\": \"John\", \"lastName\": \"Doe\", \"email\": \"john.doe@example.com\"}";
+//
+//    HttpMethod method = HttpMethod.PUT;
+//
+//    ResponseEntity<String> response = doRestCall(baseUri, null, headers, requestBody, pathParams, method);
+//
+//System.out.println("Response status: " + response.getStatusCode());
+//System.out.println("Response body: " + response.getBody());
+
+    @Test
+    void getAllEmployees() {
+        String url = "http://localhost:" + port;
+        Map<String, String> pathVariables = new HashMap<>();
+        HttpEntity<String> entity = new HttpEntity<>(null,null);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+        ResponseEntity<String> response = restTemplate.exchange(builder.buildAndExpand(pathVariables).toUri(),
+                HttpMethod.GET, entity, String.class);
+        System.out.println(response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+}
