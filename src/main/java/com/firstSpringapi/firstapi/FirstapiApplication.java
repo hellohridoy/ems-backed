@@ -1,6 +1,6 @@
 package com.firstSpringapi.firstapi;
 
-import com.firstSpringapi.firstapi.model.Employee;
+import com.firstSpringapi.firstapi.entity.Employee;
 import com.firstSpringapi.firstapi.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
