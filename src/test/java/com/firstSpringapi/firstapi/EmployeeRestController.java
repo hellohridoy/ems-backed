@@ -7,11 +7,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -57,6 +60,19 @@ public class EmployeeRestController {
         ResponseEntity<String> response = restTemplate.exchange(builder.buildAndExpand(pathVariables).toUri(),
                 HttpMethod.GET, entity, String.class);
         System.out.println(response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    void createEmployee(){
+        String url = "http://localhost:" + port +"/addEmployee";
+        String body = "{\"name\":\"John\",\"grp\":\"SQA\",\"email\":\"ridoy@gmail.com\"}";
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        List<String> appJson = new ArrayList<String>();
+        appJson.add("application/json");
+        headers.put("content-type", appJson);
+        Map<String, String> pathParams = new HashMap<>();
+        ResponseEntity<String> response = doRestCall(url,null,headers,body,pathParams,HttpMethod.POST);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 }
