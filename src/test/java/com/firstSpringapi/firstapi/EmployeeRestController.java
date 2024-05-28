@@ -75,4 +75,16 @@ public class EmployeeRestController {
         ResponseEntity<String> response = doRestCall(url,null,headers,body,pathParams,HttpMethod.POST);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
+    @Test
+    void getEmployeeById(){
+        String url = "http://localhost:" + port+"/{id}";
+        Map<String, String> pathVariables = new HashMap<>();
+        pathVariables.put("id", "14");
+        HttpEntity<String> entity = new HttpEntity<>(null,null);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+        ResponseEntity<String> response = restTemplate.exchange(builder.buildAndExpand(pathVariables).toUri(),
+                HttpMethod.GET, entity, String.class);
+        System.out.println(response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
 }
