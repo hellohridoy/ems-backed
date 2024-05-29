@@ -25,4 +25,6 @@ public class Employee {
 
     @Column(name = "email_id")
     private String emailId;
+
+
 }
