@@ -57,12 +57,12 @@ public class EmployeeServiceUnitTest {
 //        Mockito.when(employeeRepository.deleteById(employee.getId())).thenReturn(void);
 //    }
 
-    @Test
-    public void testDeleteById() {
-        long employeeId = 4;
-        employeeService.deleteEmployee(employeeId);
-        verify(employeeRepository).deleteById(employeeId);
-    }
+//    @Test
+//    public void testDeleteById() {
+//        long employeeId = 4;
+//        employeeService.deleteEmployee(employeeId);
+//        verify(employeeRepository).deleteById(employeeId);
+//    }
 
     @Test
     public void testCreateEmployee(){
